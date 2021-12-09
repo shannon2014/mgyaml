@@ -1,0 +1,50 @@
+# XWeb组件的路由配置
+---
+###############################################################
+## Please Refer YMAL: https://learnxinyminutes.com/docs/yaml ##
+###############################################################
+
+###############################################################
+## 路由配置声明表规则
+## 1. Key/Value 请使用驼峰规则，保持和业务代码一致
+## 2. params 为路由参数列表
+## 3. 修改、新增提交代码前，请先执行Validate/lint脚本，检查路由配置是否正确
+###############################################################
+
+routerConfig: 
+  - host: # 暂时预留
+    path: 'webview'
+    routeType: push # push | present | ...
+    jumpKind: 80
+    component: 
+      android: /XWeb/XWebActivity # 安卓路由配置, iOS 不需要配置
+      iOS: XWebViewController # IOS路由配置, Android 不需要配置
+    params :
+      url: 'https://m.mgtv.com/your/biz/path?key1=value1&key2=value2...' # 落地页的地址
+      title: "Example: MGBit Router System" # 页面名称
+      urlEncode: 'default is true' # App打开的时候是否需要URLEncode
+      adClickTransfer: 0 # 广告点击跳转AppStore，取消后是否展示广告页 1:自动退出广告页，返回播放页
+      isOpenOtherApp : 0 # 搜索跳转webview的时候，是否需要直接吊起APP
+      optionalParam : 'default is true' # 是否需要可选参数
+      
+
+  - host: # 暂时预留
+    path: 'xweb'
+    routeType: push # push | present | ...
+    jumpKind: 80
+    component: 
+      android: /XWeb/XWebActivity # 安卓路由配置, iOS 不需要配置
+      iOS: XWebViewController # IOS路由配置, Android 不需要配置
+    params :
+      url: 'https://m.mgtv.com/your/biz/path?key1=value1&key2=value2...' # 落地页的地址
+      title: "Example: MGBit Router System" # 页面名称
+      urlEncode: 'default is true' # App打开的时候是否需要URLEncode
+      adClickTransfer: 0 # 广告点击跳转AppStore，取消后是否展示广告页 1:自动退出广告页，返回播放页
+      isOpenOtherApp : 0 # 搜索跳转webview的时候，是否需要直接吊起APP
+      optionalParam : 'default is true' # 是否需要可选参数
+
+componentConfig:
+  componentName: MGXWebRouterConfig # 组件名称
+  componentId: XWeb # 唯一标识
+  enable: true # 是否启用
+  
