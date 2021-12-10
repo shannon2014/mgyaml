@@ -1,10 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+        google()
         maven {
             url "http://10.200.8.236:8081/nexus/content/groups/public/"
         }
-        google()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.2.0"
@@ -16,10 +16,10 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         maven {
             url "http://10.200.8.236:8081/nexus/content/groups/public/"
         }
-        google()
     }
 }
 
