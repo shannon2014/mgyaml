@@ -1,0 +1,75 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+File secretPropsFile = project.rootProject.file('upload-config.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+artifacts {
+    archives androidSourcesJar
+}
+
+
+signing {
+    sign configurations.archives
+}
+group = GROUP
+archivesBaseName = POM_ARTIFACT_ID
+version = VERSION_NAME
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name POM_ARTIFACT_ID
+                //【重要重要重要】 实测必须用jar，不能用aar,否则导致在nexus上会产生两个repository，进而导致release失败，这个配置阻塞了我一天
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'yaml parse tool'
+                url POM_URL
+
+                scm {
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_CONNECTION
+                    url POM_SCM_URL
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id POM_DEVELOPER_ID
+                        name POM_DEVELOPER_NAME
+                        email POM_DEVELOPER_EMAIL
+                    }
+                }
+            }
+        }
+    }
+}
